@@ -1,6 +1,9 @@
 hotpatch - In-Place Hotpatching of Python Functions
 ========
 
+Tested on: Python 3.6.6
+Status: experimental
+
 Hotpatching in Python is usually accomplished by replacing
 a reference to an existing object with a reference to a
 new, patched object. This is how mocking is accomplished
