@@ -1,7 +1,7 @@
 hotpatch - In-Place Hotpatching of Python Functions
 ========
 
-Tested on: Python 3.6.6
+Tested on: Python 3.6.6<br>
 Status: experimental
 
 Hotpatching in Python is usually accomplished by replacing
