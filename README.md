@@ -1,8 +1,20 @@
 hotpatch - In-Place Hotpatching of Python Functions
 ========
 
-Tested on: Python 3.6.6<br>
+Tested on: Python 3.6.6 (CPython)<br>
 Status: experimental
+
+Installing
+----------
+
+To install, type the following in the repoistory directory:
+
+```
+$ python3 setup.py install
+```
+
+Why This Module Might be Useful
+------
 
 Hotpatching in Python is usually accomplished by replacing
 a reference to an existing object with a reference to a
@@ -49,9 +61,12 @@ for top-level references to the function in question. However,
 this will have a running time proportional to the number of
 top-level symbols your program has in all its loaded modules.
 
-A faster, CPython-specific approach (implemented by this
-package) is to patch the function object itself by creating
-and setting a new `code` object (accessed via the `__code__`
+
+
+The approach implemented by this package -- which is CPython
+specific and may break in future versions of CPython -- is to
+patch the function object itself by creating
+and setting a new code object (accessed via the `__code__`
 attribute). In the simplest case, this is as easy as the
 following:
 
@@ -65,7 +80,7 @@ A function object stores the attribute `__closure__`
 containing bindings for the free variables in the
 code object. Presumably this is because function
 instances produced by the same nested function block
-will all the same code but potentially have different
+will all share the same code but potentially have different
 environments. Defaults also need to be stored on the
 function object because of cases where the default
 is dynamic, e.g.:
@@ -104,21 +119,20 @@ as a varargs function that looks something
 like this:
 
 ```
-def trampoline(*args, **kwargs)
+def trampoline(*args, **kwargs):
     return replacement(*args, **kwargs)
 ```
 
-You might suspect that if the defaults for the
+You might suspect that since the defaults for the
 target are defined on its function object and we
-replace the code object with the code object
-from the above function, then we would get the
-defaults from the original target function.
+replace the function object's code object with the
+code object from the above function, then we would
+get the defaults from the original target function.
 However, CPython ignores the defaults as the
 target's argument count comes from the code
 object, and for the above varargs function it
 is zero. This is a quirk of the CPython
-implementation, which happens not to check if
-the function object contains superfluous defaults
-that cannot be used by the attached code object.
+implementation. In future versions more work might
+be necessary, e.g. replacing the `__defaults__`
+attribute on the function object.
 
-TODO continue explanation
