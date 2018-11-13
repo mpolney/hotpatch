@@ -9,4 +9,5 @@ setup(
     author_email='michael@spectralforms.com',
     license='MIT',
     packages=['hotpatch'],
-    zip_safe=False)
+    zip_safe=False,
+    install_requires=['bytecode'])
